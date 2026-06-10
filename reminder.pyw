@@ -18,7 +18,7 @@ def show_reminder():
         label.pack(expand=True)
         time_window.after(100, time_window.destroy)  # Close window after 3 seconds
         time_window.update()
-        target_times = [(22, 6), (22, 7)]  # trigger time
+        target_times = [(10, 25), (10, 30)]  # trigger time
         
         if (current_time.hour, current_time.minute) in target_times:
             # Initialize text-to-speech engine
@@ -38,13 +38,19 @@ def show_reminder():
             
             # Function to play voice in background
             def play_voice():
-                engine.say(message)
-                engine.runAndWait()
+                try:
+                    engine.say(message)
+                    engine.runAndWait()
+                finally:
+                    engine.stop()
             
             # Start voice in separate thread
             voice_thread = threading.Thread(target=play_voice)
             voice_thread.daemon = True
             voice_thread.start()
+            
+            # Wait for voice thread to complete before showing messagebox
+            voice_thread.join(timeout=5)
             
             # Show messagebox immediately
             result = messagebox.askyesno(
