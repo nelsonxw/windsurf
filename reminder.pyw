@@ -9,19 +9,6 @@ def show_reminder():
     root = tk.Tk()
     root.withdraw()  # Hide the main window
     
-    # Initialize text-to-speech engine once
-    engine = pyttsx3.init()
-    voices = engine.getProperty('voices')
-    # Set to female voice (usually index 1 or check for 'female' in voice name)
-    for voice in voices:
-        if 'female' in voice.name.lower():
-            engine.setProperty('voice', voice.id)
-            break
-    else:
-        # Fallback to second voice if no female voice found
-        if len(voices) > 1:
-            engine.setProperty('voice', voices[1].id)
-    
     while True:
         current_time = datetime.now().time()
         target_times = [(10, 56), (10, 58)]  # trigger time
