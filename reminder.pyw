@@ -24,16 +24,20 @@ def show_reminder():
     
     while True:
         current_time = datetime.now().time()
-        # time_window = tk.Toplevel(root)
-        # time_window.title("Current Time")
-        # time_window.geometry("250x100")
-        # label = tk.Label(time_window, text=f"Current time: {current_time.strftime('%H:%M:%S')}", font=("Arial", 16))
-        # label.pack(expand=True)
-        # time_window.after(100, time_window.destroy)  # Close window after 3 seconds
-        # time_window.update()
-        target_times = [(10, 45), (10, 50)]  # trigger time
+        target_times = [(10, 56), (10, 58)]  # trigger time
         
         if (current_time.hour, current_time.minute) in target_times:
+            # Reinitialize engine for each trigger
+            engine = pyttsx3.init()
+            voices = engine.getProperty('voices')
+            for voice in voices:
+                if 'female' in voice.name.lower():
+                    engine.setProperty('voice', voice.id)
+                    break
+            else:
+                if len(voices) > 1:
+                    engine.setProperty('voice', voices[1].id)
+            
             message = "Richard, your mom is asking you ......: Do you agree to shut down your PC and go to bed at 10:30pm every night?"
             
             # Play voice synchronously
@@ -54,7 +58,8 @@ def show_reminder():
                 time.sleep(60)  # Wait 1 minute before continuing
             else:
                 print("User declined or closed the reminder, showing again")
-                
+        
+        time.sleep(1)  # Check every second
 
 if __name__ == "__main__":
     show_reminder()
