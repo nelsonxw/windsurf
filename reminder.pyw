@@ -7,10 +7,10 @@ import threading
 import os
 
 def show_reminder():
-    reminder_message = "Richard, your mom is asking you ......: Do you agree to shut down your PC and go to bed at 10:30pm every night?"
+    reminder_message = "Richard, did you agree to shut down your PC and go to bed at 10:30pm every night?"
     final_message = "Shut down in 5 minutes.  Save all your works to avoid losing them."
-    reminder_voice = "reminder.mp3"
-    final_voice = "final.mp3"
+    reminder_voice = "Reminder.m4a"
+    final_voice = "Final.m4a"
     
     def play_voice(choice):
         try:
@@ -24,17 +24,17 @@ def show_reminder():
 
     root = tk.Tk()
     root.withdraw()  # Hide the main window
-    target_times = [(22, 20), (22, 21)]  # reminder trigger time at 21:30 and 22:00
+    target_times = [(10, 23), (10, 25)]  # reminder trigger time at 21:30 and 22:00
 
     while True:
         current_time = datetime.now().time()
 
         # Shutdown trigger at 22:35
-        if (current_time.hour, current_time.minute) == (22, 23):
+        if (current_time.hour, current_time.minute) == (22, 35):
             os.system("shutdown /s /t 0")
         
         # Final reminder trigger at 22:30
-        elif (current_time.hour, current_time.minute) == (22, 22):
+        elif (current_time.hour, current_time.minute) == (10, 27):
             play_voice(final_voice)
                 
             # Make window appear on top
@@ -42,6 +42,7 @@ def show_reminder():
             root.lift()
             root.focus_force()
             messagebox.showinfo("Final Reminder", final_message)
+            time.sleep(60)  # Wait 1 minute, bypass the trigger time
                 
         # Reminger trigger at 21:30 and 22:00
         elif (current_time.hour, current_time.minute) in target_times:
@@ -54,19 +55,17 @@ def show_reminder():
 
             # Show messagebox immediately
             result = messagebox.askyesno(
-                reminder_message
+                "Reminder",reminder_message
             )
         
-            # Reset topmost attribute
-            #root.attributes('-topmost', False)
             
             if result:
                 time.sleep(60)  # Wait 1 minute, bypass the trigger time
             else:
-                time.sleep(1)  # Check every second
+                pass
             
             
-            
+        time.sleep(1)  # Check every second    
 
 if __name__ == "__main__":
     show_reminder()
