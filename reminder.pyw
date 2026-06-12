@@ -3,6 +3,7 @@ from datetime import datetime
 import time
 import threading
 import os
+import sys
 from playsound3 import playsound
 from PIL import Image, ImageTk
 
@@ -20,6 +21,16 @@ BUTTON_TEXT_COLOR = "white"
 CHECK_INTERVAL = 1
 BYPASS_DURATION = 60
 
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
+
+
 # Configuration
 REMINDER_TIMES = [(21, 30), (22, 00)] # 9:30 PM and 10:00 PM
 FINAL_REMINDER_TIME = (22, 30) # 10:30 PM
@@ -27,10 +38,10 @@ SHUTDOWN_TIME = (22, 35) # 10:35 PM
 
 REMINDER_MESSAGE = "Richard, did you agree to shut down your PC and go to bed at 10:30pm every night?"
 FINAL_MESSAGE = "Go Sleep Now! Shut down in 5 minutes.  Save all your work!"
-REMINDER_VOICE = "Reminder.m4a"
-FINAL_VOICE = "Final.m4a"
-REMINDER_GIF = "go_to_bed.gif"
-FINAL_GIF = "monster.gif"
+REMINDER_VOICE = resource_path("Reminder.m4a")
+FINAL_VOICE = resource_path("Final.m4a")
+REMINDER_GIF = resource_path("go_to_bed.gif")
+FINAL_GIF = resource_path("monster.gif")
 
 
 class AnimatedPopup:
